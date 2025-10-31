@@ -15,6 +15,10 @@ class MyApp extends StatelessWidget{
 class MainScreen extends StatelessWidget{
   const MainScreen({super.key});
 
+
+  final tab1Text = const Text("This is the home screen text for Act#3 and now #4");
+  final tab2Text = const Text("This is the gallery screen where columns and rows are demoed in flutter. Prevously act #2");
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,15 +33,32 @@ class MainScreen extends StatelessWidget{
             backgroundColor: Colors.deepPurpleAccent,
             centerTitle: true,
           ),
-          bottomNavigationBar: const Material(
+          bottomNavigationBar: Material(
             color: Colors.deepPurpleAccent,
-            child: TabBar(
-              unselectedLabelColor: Colors.white,
-              labelColor: Colors.amber,
-              tabs: [
-                Tab(icon: Icon(Icons.add_circle), text: "Act 3: Home",),
-                Tab(icon: Icon(Icons.abc_outlined),text: "Act 2: Gallery",),
-              ],
+            child: Builder(
+              builder: (ctx)=>TabBar(
+                onTap: (index) async{
+                  await showDialog(
+                    context: ctx,
+                    builder: (_) => AlertDialog(
+                      title: const Text("test"),
+                      content: index == 0 ? tab1Text : tab2Text,
+                      actions: [
+                        TextButton(
+                          onPressed:() => Navigator.pop(ctx),
+                          child: const Text("Dimiss")
+                        )
+                      ]
+                    )
+                  );
+                },
+                unselectedLabelColor: Colors.white,
+                labelColor: Colors.amber,
+                tabs: [
+                  Tab(icon: Icon(Icons.add_circle), text: "Act 3: Home",),
+                  Tab(icon: Icon(Icons.abc_outlined),text: "Act 2: Gallery",),
+                ],
+              ),
             ),
           ),
           body: const TabBarView(
@@ -85,7 +106,16 @@ class CardHome extends StatelessWidget{
   Widget build(BuildContext context) {
 
     const double fontSize = 24;
-    final snackBar = SnackBar(content: const Text("Made by Krystian L. Genson for Mobile Dev II"));
+    // final snackBar = SnackBar(content: const Text("Made by Krystian L. Genson for Mobile Dev II"));
+    final alertDialog = AlertDialog(
+      content: const Text("Made by Krystian L. Genson for Mobile Dev II"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Dismiss"),
+        ),
+      ],
+    );
     return(
       Card(
         color: Colors.deepPurpleAccent,
@@ -126,7 +156,10 @@ class CardHome extends StatelessWidget{
                     foregroundColor: Colors.white,            // text (and icon) color
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   ),
-                  onPressed: (){ScaffoldMessenger.of(context).showSnackBar(snackBar);},
+                  // onPressed: (){ScaffoldMessenger.of(context).showSnackBar(snackBar);},
+                  onPressed: () async{
+                    await showDialog(context: context, builder: (_)=>alertDialog);
+                  },
                   child: Text(
                     "Welcome!", 
                     style: TextStyle(
