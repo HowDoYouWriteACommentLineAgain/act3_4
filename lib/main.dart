@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -14,6 +13,8 @@ class MyApp extends StatelessWidget{
 }
 
 class MainScreen extends StatelessWidget{
+  const MainScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,32 +23,40 @@ class MainScreen extends StatelessWidget{
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text(style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),'Home Screen'),
             backgroundColor: Colors.deepPurpleAccent,
             centerTitle: true,
-            bottom: const TabBar(
+          ),
+          bottomNavigationBar: const Material(
+            color: Colors.deepPurpleAccent,
+            child: TabBar(
               unselectedLabelColor: Colors.white,
               labelColor: Colors.amber,
               tabs: [
-                Tab(icon: Icon(Icons.add_circle)),
-                Tab(icon: Icon(Icons.abc_outlined)),
+                Tab(icon: Icon(Icons.add_circle), text: "Act 3: Home",),
+                Tab(icon: Icon(Icons.abc_outlined),text: "Act 2: Gallery",),
               ],
             ),
           ),
           body: const TabBarView(
             children: [
               ColoredBox(
-                color: Colors.purpleAccent,
+                color: Colors.white60,
                 child: Center(
-                  child: HomeScreen(),
+                  child: CardHome(),
                 ),
               ),
               ColoredBox(
-                color: Colors.amberAccent,
-                child: LocalImageDemo(),
+                color: Colors.white60,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 120.0),
+                    child: LocalImageDemo()
+                  ),
+                ),
               ),
-
             ]
           )
         )
@@ -57,17 +66,85 @@ class MainScreen extends StatelessWidget{
 }
 
 class HomeScreen extends StatelessWidget{
-  const HomeScreen();
+  const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Center(
       child: const Text(
         style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-        'Hello! :)',
+        'Hello! :). If second tab does not appear please make sure that local_image_demo.dart is also included in the lib',
       )
     );
   }
 }
+
+class CardHome extends StatelessWidget{
+  const CardHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    const double fontSize = 24;
+    final snackBar = SnackBar(content: const Text("Made by Krystian L. Genson for Mobile Dev II"));
+    return(
+      Card(
+        color: Colors.deepPurpleAccent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        elevation: 4.0,
+        shadowColor: Colors.black.withValues(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: 300,
+            maxWidth: 380
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.black,
+                    fontSize: fontSize
+                  ),
+                  'Hello! 😀'
+                ),
+                SizedBox(height: 8),
+                Text(
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.black,
+                    fontSize: fontSize
+                  ),
+                  'If second tab does not appear please make sure that local_image_demo.dart is also included in the lib'
+                ),
+                SizedBox(height: 8),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.amberAccent, // button background
+                    foregroundColor: Colors.white,            // text (and icon) color
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
+                  onPressed: (){ScaffoldMessenger.of(context).showSnackBar(snackBar);},
+                  child: Text(
+                    "Welcome!", 
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold
+                    )
+                  )
+                )
+              ],
+            ),
+          ),
+        ),
+      )
+    );
+  }
+}
+
+
 
 class LocalImageDemo extends StatelessWidget {
   const LocalImageDemo({super.key});
